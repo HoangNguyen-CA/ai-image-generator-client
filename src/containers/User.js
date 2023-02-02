@@ -1,10 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import { getUserImages } from "services/user.service";
 import { useOutletContext } from "react-router-dom";
-import ImageFrame from "components/ImageFrame";
 import Grid from "@mui/material/Unstable_Grid2"; // Grid version 2
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteUserImage } from "services/user.service";
+import UserImage from "components/User/UserImage";
+import { Typography } from "@mui/material";
 
 function User() {
   const { accessToken } = useOutletContext();
@@ -29,23 +30,25 @@ function User() {
 
   return (
     <Grid container spacing={2}>
-      {data?.images &&
+      {data?.images?.length > 0 ? (
         data.images.map((image) => (
           <Grid xs={12} sm={6} md={4} lg={3} key={image.image_id}>
-            <ImageFrame imageURL={image.image_url} prompt={image.prompt} />
-            <p>{image.prompt}</p>
-            <button
-              onClick={() =>
+            <UserImage
+              image={image}
+              onDelete={() =>
                 mutateCreateImage.mutate({
                   imageId: image.image_id,
                   accessToken,
                 })
               }
-            >
-              Delete Image
-            </button>
+            />
           </Grid>
-        ))}
+        ))
+      ) : (
+        <Grid xs={12}>
+          <Typography>You have no saved images.</Typography>
+        </Grid>
+      )}
     </Grid>
   );
 }

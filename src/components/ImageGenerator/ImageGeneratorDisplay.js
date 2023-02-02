@@ -14,11 +14,9 @@ function ImageGeneratorDisplay({
     content = (
       <Skeleton
         variant="rectangular"
-        width={512}
+        width="80%"
         height={512}
-        sx={{
-          maxWidth: "100%",
-        }}
+        sx={{ maxWidth: 512 }}
       ></Skeleton>
     );
   } else if (isError) {
