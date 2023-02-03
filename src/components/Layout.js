@@ -31,8 +31,12 @@ function Layout() {
   const { loginWithRedirect, logout } = useAuth0();
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  const handleDrawerToggle = () => {
-    setMobileOpen((prevOpen) => !prevOpen);
+  const handleDrawerOpen = () => {
+    setMobileOpen(true);
+  };
+
+  const handleDrawerClose = () => {
+    setMobileOpen(false);
   };
 
   const drawerWidth = 240;
@@ -77,8 +81,11 @@ function Layout() {
     noAuthLinks.unshift(item);
   });
 
+  const container =
+    window !== undefined ? () => window.document.body : undefined;
+
   const drawer = (
-    <Box onClick={handleDrawerToggle}>
+    <Box onClick={handleDrawerClose}>
       <Toolbar />
       <Divider />
       <List>
@@ -115,7 +122,7 @@ function Layout() {
         <Toolbar>
           <IconButton
             color="inherit"
-            onClick={handleDrawerToggle}
+            onClick={handleDrawerOpen}
             sx={{ mr: 2, display: { md: "none" } }}
           >
             <MenuIcon />
@@ -142,6 +149,7 @@ function Layout() {
       >
         <Drawer
           variant="permanent"
+          open
           sx={{
             "& .MuiDrawer-paper": { width: drawerWidth },
             display: { xs: "none", md: "block" },
@@ -152,7 +160,8 @@ function Layout() {
         <Drawer
           variant="temporary"
           open={mobileOpen}
-          onClose={handleDrawerToggle}
+          container={container}
+          onClose={handleDrawerClose}
           // ModalProps={{ keepMounted: true }}
           sx={{
             "& .MuiDrawer-paper": { width: drawerWidth },
@@ -167,6 +176,7 @@ function Layout() {
         sx={{
           flexGrow: 1,
           width: { md: `calc(100% - ${drawerWidth}px)` },
+          minHeight: "100vh",
         }}
       >
         <Container maxWidth="lg" sx={{ p: 3 }}>
